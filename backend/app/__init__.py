@@ -3,7 +3,11 @@ Flask Application Factory.
 Creates and configures the Flask application instance.
 """
 
-from flask import Flask
+import os
+from pathlib import Path
+
+from flask import Flask, send_from_directory
+
 from .config import get_config
 from .extensions import db, migrate, jwt, cors
 
@@ -14,6 +18,11 @@ def create_app(config_class=None):
     :param config_class: Optional config class override (used in tests).
     :return: Configured Flask application instance.
     """
+    project_root = Path(__file__).resolve().parents[2]
+    dist_path = Path(
+        os.getenv("FRONTEND_DIST_PATH", str(project_root / "frontend" / "dist"))
+    )
+
     app = Flask(__name__)
 
     # Load configuration
@@ -44,8 +53,35 @@ def create_app(config_class=None):
 
     # JWT error handlers
     _register_jwt_handlers(app)
+    _register_frontend_routes(app, dist_path)
 
     return app
+
+
+def _register_frontend_routes(app, dist_path):
+    """Serve the built React frontend for SPA routes when a dist folder exists."""
+    index_file = dist_path / "index.html"
+    if not index_file.exists():
+        return
+
+    @app.route("/health")
+    def health_check():
+        return {"status": "ok"}, 200
+
+    @app.route("/", defaults={"path": ""})
+    @app.route("/<path:path>")
+    def serve_frontend(path):
+        if path.startswith("api/") or path == "api":
+            return {"error": "Not found"}, 404
+
+        candidate_path = dist_path / path
+        if path and candidate_path.exists():
+            return send_from_directory(str(dist_path), path)
+
+        if path == "":
+            return send_from_directory(str(dist_path), "index.html")
+
+        return send_from_directory(str(dist_path), "index.html")
 
 
 def _register_jwt_handlers(app):

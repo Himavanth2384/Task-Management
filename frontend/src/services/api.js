@@ -7,7 +7,7 @@ import axios from 'axios'
  * - Redirects to /login on 401 responses
  */
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.PROD ? '/api' : '/api',
   headers: {
     'Content-Type': 'application/json',
   },

@@ -8,10 +8,14 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  },
   server: {
     port: 5173,
     proxy: {
-      // Proxy all /api calls to Flask backend
+      // Proxy all /api calls to Flask backend during local development
       '/api': {
         target: 'http://localhost:5000',
         changeOrigin: true,
