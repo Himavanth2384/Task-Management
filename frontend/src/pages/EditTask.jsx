@@ -37,9 +37,10 @@ export default function EditTask() {
   const handleSubmit = async (formData) => {
     setLoading(true)
     try {
-      await taskService.updateTask(id, formData)
+      const response = await taskService.updateTask(id, formData)
+      setTask(response.task)
       toast.success('Task updated successfully!')
-      navigate(`/tasks/${id}`)
+      navigate(`/tasks/${id}?updated=${Date.now()}`)
     } catch (err) {
       const apiErrors = err.response?.data?.errors
       if (apiErrors) {

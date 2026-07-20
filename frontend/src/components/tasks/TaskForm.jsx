@@ -59,6 +59,9 @@ export default function TaskForm({ initialData = {}, onSubmit, loading = false, 
 
     const payload = {
       ...form,
+      title: form.title.trim(),
+      status: (form.status || INITIAL_STATE.status).trim(),
+      priority: (form.priority || INITIAL_STATE.priority).trim(),
       due_date: form.due_date || null,
       category: form.category.trim() || null,
       description: form.description.trim() || null,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom'
 import {
   RiEditLine, RiDeleteBin6Line, RiArrowLeftLine,
   RiCalendarLine, RiPriceTag3Line, RiFlagLine, RiTimeLine,
@@ -26,17 +26,33 @@ const PRIORITY_STYLES = {
 export default function ViewTask() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [task, setTask] = useState(null)
   const [loading, setLoading] = useState(true)
   const [showDelete, setShowDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
+    let cancelled = false
+
     taskService.getTask(id)
-      .then(data => setTask(data.task))
-      .catch(() => { toast.error('Task not found.'); navigate('/tasks') })
-      .finally(() => setLoading(false))
-  }, [id])
+      .then(data => {
+        if (!cancelled) setTask(data.task)
+      })
+      .catch(() => {
+        if (!cancelled) {
+          toast.error('Task not found.')
+          navigate('/tasks')
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [id, location.search])
 
   const handleDelete = async () => {
     setDeleting(true)
