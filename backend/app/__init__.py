@@ -21,7 +21,7 @@ def create_app(config_class=None):
     project_root = Path(__file__).resolve().parents[2]
     dist_path = Path(
         os.getenv("FRONTEND_DIST_PATH", str(project_root / "frontend" / "dist"))
-    )
+    ).resolve()
 
     app = Flask(__name__)
 
@@ -74,12 +74,9 @@ def _register_frontend_routes(app, dist_path):
         if path.startswith("api/") or path == "api":
             return {"error": "Not found"}, 404
 
-        candidate_path = dist_path / path
-        if path and candidate_path.exists():
+        route_path = dist_path / path
+        if path and route_path.exists():
             return send_from_directory(str(dist_path), path)
-
-        if path == "":
-            return send_from_directory(str(dist_path), "index.html")
 
         return send_from_directory(str(dist_path), "index.html")
 
