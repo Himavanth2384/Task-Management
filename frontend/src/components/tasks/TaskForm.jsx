@@ -15,6 +15,17 @@ const INITIAL_STATE = {
   due_date:    '',
 }
 
+const normalizeInitialData = (data = {}) => ({
+  ...INITIAL_STATE,
+  ...data,
+  title: data.title ?? '',
+  description: data.description ?? '',
+  status: data.status ?? INITIAL_STATE.status,
+  priority: data.priority ?? INITIAL_STATE.priority,
+  category: data.category ?? '',
+  due_date: data.due_date ?? '',
+})
+
 /**
  * TaskForm — reusable form for creating and editing tasks.
  *
@@ -26,13 +37,13 @@ const INITIAL_STATE = {
  */
 export default function TaskForm({ initialData = {}, onSubmit, loading = false, mode = 'create' }) {
   const navigate = useNavigate()
-  const [form, setForm] = useState({ ...INITIAL_STATE, ...initialData })
+  const [form, setForm] = useState(() => normalizeInitialData(initialData))
   const [errors, setErrors] = useState({})
 
   // Sync form when initialData changes (edit mode)
   useEffect(() => {
     if (initialData && Object.keys(initialData).length > 0) {
-      setForm({ ...INITIAL_STATE, ...initialData })
+      setForm(normalizeInitialData(initialData))
     }
   }, [initialData?.id])
 
@@ -44,7 +55,7 @@ export default function TaskForm({ initialData = {}, onSubmit, loading = false, 
 
   const validate = () => {
     const errs = {}
-    if (!form.title.trim()) errs.title = 'Title is required.'
+    if (!(form.title ?? '').trim()) errs.title = 'Title is required.'
     if (form.due_date) {
       const d = new Date(form.due_date)
       if (isNaN(d.getTime())) errs.due_date = 'Enter a valid date (YYYY-MM-DD).'
@@ -59,12 +70,12 @@ export default function TaskForm({ initialData = {}, onSubmit, loading = false, 
 
     const payload = {
       ...form,
-      title: form.title.trim(),
+      title: (form.title ?? '').trim(),
       status: (form.status || INITIAL_STATE.status).trim(),
       priority: (form.priority || INITIAL_STATE.priority).trim(),
       due_date: form.due_date || null,
-      category: form.category.trim() || null,
-      description: form.description.trim() || null,
+      category: (form.category ?? '').trim() || null,
+      description: (form.description ?? '').trim() || null,
     }
     await onSubmit(payload)
   }
