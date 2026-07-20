@@ -58,8 +58,7 @@ export default function Sidebar({ isOpen, onClose }) {
             <RiCheckboxCircleLine className="text-white text-xl" />
           </div>
           <div>
-            <p className="text-white font-bold text-sm leading-tight">TaskFlow</p>
-            <p className="text-indigo-300 text-xs">Pro</p>
+            <p className="text-white font-bold text-sm leading-tight">Task Management</p>
           </div>
         </div>
 

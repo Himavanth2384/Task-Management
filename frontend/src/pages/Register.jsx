@@ -77,7 +77,7 @@ export default function Register() {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
             <RiCheckboxCircleLine className="text-white text-xl" />
           </div>
-          <p className="text-white font-bold text-xl">TaskFlow</p>
+          <p className="text-white font-bold text-xl">Task Management</p>
         </div>
 
         <div className="mb-8">

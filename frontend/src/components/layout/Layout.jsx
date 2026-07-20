@@ -27,7 +27,7 @@ export default function Layout() {
     if (PAGE_TITLES[path]) return PAGE_TITLES[path]
     if (path.startsWith('/tasks/') && path.endsWith('/edit')) return 'Edit Task'
     if (path.startsWith('/tasks/')) return 'Task Details'
-    return 'TaskFlow'
+    return 'Task Management'
   }
 
   return (

@@ -1,4 +1,4 @@
-# TaskFlow — Full-Stack Task Management Application
+# Full-Stack Task Management Application
 
 A **production-ready** Full-Stack Task Management Web Application built with **Flask** (backend) and **React.js + Vite** (frontend). Features JWT authentication, full CRUD for tasks, rich filtering/sorting/pagination, and a beautiful responsive UI with dark mode.
 
@@ -295,7 +295,7 @@ Import this collection snippet to test APIs quickly:
 
 ```json
 {
-  "info": { "name": "TaskFlow API" },
+  "info": { "name": "Task Management API" },
   "variable": [
     { "key": "base_url", "value": "http://localhost:5000/api" },
     { "key": "token", "value": "" }
